@@ -1,0 +1,7 @@
+{
+  "name": "mfp-biometric-ionic",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
