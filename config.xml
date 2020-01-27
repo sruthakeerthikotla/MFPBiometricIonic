@@ -2,8 +2,8 @@
 <widget id="com.mfp.biometric" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0" xmlns:mfp="http://www.ibm.com/mobilefirst/cordova-plugin-mfp">
     <name>mfp-biometric-ionic</name>
     <description>MFP Ionic 4.x Sample demonstrates the use of the Biometric Authentication.</description>
-    <author email="hi@ionicframework.com" href="http://ionicframework.com/">Ionic Framework Team</author>
-    <content src="index.html" />
+    <author email="vittalpai@in.ibm.com" href="http://ibm.com">Vittal R Pai</author>
+    <content original-src="index.html" src="http://localhost:8101" />
     <access origin="*" />
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
@@ -105,7 +105,7 @@
     <plugin name="cordova-plugin-ionic-webview" spec="^4.0.0" />
     <plugin name="cordova-plugin-ionic-keyboard" spec="^2.0.5" />
     <mfp:android>
-        <mfp:sdkChecksum>0</mfp:sdkChecksum>
+        <mfp:sdkChecksum>1304923582</mfp:sdkChecksum>
         <mfp:appChecksum>0</mfp:appChecksum>
         <mfp:security>
             <mfp:testWebResourcesChecksum enabled="false" ignoreFileExtensions="png, jpg, jpeg, gif, mp4, mp3" />
@@ -141,9 +141,10 @@
     </mfp:windows>
     <mfp:platformVersion>8.0.0.00-20191217-114222</mfp:platformVersion>
     <mfp:clientCustomInit enabled="false" />
-    <mfp:server runtime="mfp" url="http://10.0.0.1:9080" />
+    <mfp:server runtime="mfp" url="http://192.168.1.36:9080" />
     <mfp:serverUri url="" />
     <mfp:directUpdateAuthenticityPublicKey />
     <mfp:languagePreferences>en</mfp:languagePreferences>
     <mfp:APIproxyURL>/adapters/MobileAPIProxy</mfp:APIproxyURL>
+    <allow-navigation href="http://localhost:8101" sessionid="ef1959f8" />
 </widget>
