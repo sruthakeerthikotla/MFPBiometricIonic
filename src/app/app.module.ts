@@ -8,6 +8,9 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
+import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
+import { AuthenticationService } from 'src/app/services/authentication.service'
+import { UtilsService } from 'src/app/services/utils.service'
 
 @NgModule({
   declarations: [AppComponent],
@@ -16,7 +19,10 @@ import { AppRoutingModule } from './app-routing.module';
   providers: [
     StatusBar,
     SplashScreen,
-    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
+    { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
+    FingerprintAIO,
+    AuthenticationService,
+    UtilsService
   ],
   bootstrap: [AppComponent]
 })
