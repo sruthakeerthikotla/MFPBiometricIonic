@@ -41,20 +41,20 @@ export class LoginPage implements OnInit {
     }
     
     checkForEnrollment() {
-      this.authenticationService.isEnrolled()
-      .then(() => {
-        WL.Logger.debug("Device is enrolled for Biometric Authentication")
-        this.mfpUser = this.jsonstoreService.currentUserValue;
-      })
-      .catch((error) => {
-        WL.Logger.debug("Device is not enrolled for Biometric Authentication")
-        if(this.jsonstoreService.currentUserValue.isEnrolled) {
-          var user = this.jsonstoreService.currentUserValue;
-          user.isEnrolled = false;
-          user.secretToken = null;
-          this.jsonstoreService.storeUserData(user);
-        }
-      });
+      // this.authenticationService.isEnrolled()
+      // .then(() => {
+      //   WL.Logger.debug("Device is enrolled for Biometric Authentication")
+      //   this.mfpUser = this.jsonstoreService.currentUserValue;
+      // })
+      // .catch((error) => {
+      //   WL.Logger.debug("Device is not enrolled for Biometric Authentication")
+      //   if(this.jsonstoreService.currentUserValue.isEnrolled) {
+      //     var user = this.jsonstoreService.currentUserValue;
+      //     user.isEnrolled = false;
+      //     user.secretToken = null;
+      //     this.jsonstoreService.storeUserData(user);
+      //   }
+      // });
     }
 
 
@@ -97,22 +97,9 @@ export class LoginPage implements OnInit {
     if (this.utils.isFingerprintAvailable) {
       this.utils.presentFingerPrint()
       .then((result: any) => {
-        const promise = this.authenticationService.pinLogin();
-        promise.then((response: any) => {
-          this.password = "";
-          if (response.status !== undefined && response.status === 'success') {
-            this.router.navigate(['/home']);
-          } else {
-            this.utils.showAlert('Error!', 'Error while authenticating the user');
-          }
-        }).catch((error) => {
-          this.password = "";
-          if (error.status !== undefined && error.status === 'error') {
-            this.utils.showAlert('Error!', error.message);
-          } else {
-            this.utils.showAlert('Error!', 'Error while authenticating the user');
-          }
-        });
+        this.userName = this.mfpUser.userName
+        this.password = this.mfpUser.secretToken
+        this.login();
       })
       .catch((error: any) => {
         console.error('fingerprint : ', 'error');

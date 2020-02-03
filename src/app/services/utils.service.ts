@@ -61,7 +61,7 @@ export class UtilsService {
     return result;
   }
 
-  async presentEnrollAlert() {
+  async presentEnrollAlert(username, password) {
     const alert = await this.alertCtrl.create({
       header: 'Biometric Enrollment',
       message: 'Do you wish to enroll for Mobilefirst Biometric Authentication',
@@ -75,19 +75,13 @@ export class UtilsService {
           handler: () => {
             if (this.isFingerprintAvailable()) {
               this.presentFingerPrint().then((result: any) => {
-                this.authenticationService.enroll().then(
-                  () => {
-                    let user = new MFPUser();
-                    user.userName = "MFPUser";
-                    user.isEnrolled = true;
-                    user.secretToken = "1234";
-                    this.jsonstoreService.storeUserData(user).finally(() =>{
-                      this.showAlert('Success', 'Successfully enrolled for Biometric Authentication');
-                    });
-                  }, () => {
-                    this.showAlert('Failure', 'Failed to enroll for Biometric Authentication');
-                  }
-                )
+                let user = new MFPUser();
+                user.userName = username;
+                user.isEnrolled = true;
+                user.secretToken = password;
+                this.jsonstoreService.storeUserData(user).finally(() =>{
+                  this.showAlert('Success', 'Successfully enrolled for Biometric Authentication');
+                });
               })
               .catch((error: any) => {
                 this.showAlert('Failure', 'Failed to enroll for Biometric Authentication');

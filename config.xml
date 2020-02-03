@@ -141,7 +141,7 @@
     </mfp:windows>
     <mfp:platformVersion>8.0.0.00-20191217-114222</mfp:platformVersion>
     <mfp:clientCustomInit enabled="false" />
-    <mfp:server runtime="mfp" url="http://192.168.1.36:9080" />
+    <mfp:server runtime="mfp" url="http://192.168.1.39:9080" />
     <mfp:serverUri url="" />
     <mfp:directUpdateAuthenticityPublicKey />
     <mfp:languagePreferences>en</mfp:languagePreferences>
