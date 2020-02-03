@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { AuthenticationService } from 'src/app/services/authentication.service';
 import { Router } from '@angular/router';
 import { UtilsService } from 'src/app/services/utils.service';
+import { JsonstoreService } from 'src/app/services/jsonstore.service';
 
 @Component({
   selector: 'app-home',
@@ -10,8 +11,10 @@ import { UtilsService } from 'src/app/services/utils.service';
 })
 export class HomePage {
 
-  constructor(private authenticationService : AuthenticationService, private router: Router, private utils : UtilsService) {
-    this.utils.presentEnrollAlert();
+  constructor(private authenticationService : AuthenticationService, private router: Router, private utils : UtilsService, private jsonstoreService : JsonstoreService) {
+    if(this.jsonstoreService.currentUserValue == undefined || !this.jsonstoreService.currentUserValue.isEnrolled) {
+      this.utils.presentEnrollAlert();
+    }
   }
 
   logout() {

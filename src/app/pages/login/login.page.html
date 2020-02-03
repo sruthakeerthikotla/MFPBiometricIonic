@@ -8,7 +8,7 @@
             </ion-text>
           </div>
           <br/><br/>
-          <div padding>
+          <div padding *ngIf="mfpUser == undefined">
             <ion-item>
               <ion-input type="text" placeholder="Username"  [(ngModel)]="userName"></ion-input>
             </ion-item>
@@ -22,12 +22,12 @@
             <ion-button color="primary" size="large" (click)="login()" expand="block">Login</ion-button>
           </div>
 
-          <div padding text-center>
-            <ion-label color="secondary" bold> -- OR -- </ion-label>
+          <div padding text-center *ngIf="mfpUser !== undefined">
+            <ion-button  color="primary" size="large" (click)="loginWithFingerprint()"  expand="block"><ion-icon name="finger-print"></ion-icon> Login with Fingerprint </ion-button>
           </div>
 
-          <div padding text-center>
-            <ion-button  color="primary" size="large" (click)="loginWithFingerprint()"  expand="block"><ion-icon name="finger-print"></ion-icon> Login with Fingerprint </ion-button>
+          <div padding text-center *ngIf="mfpUser !== undefined">
+            <ion-button bold>Sign in with your login credentials instead</ion-button>
           </div>
         </ion-col>
       </ion-row>

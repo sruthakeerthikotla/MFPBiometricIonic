@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { LoadingController, AlertController } from '@ionic/angular';
-import { FingerprintAIO, FingerprintOptions } from '@ionic-native/fingerprint-aio/ngx';
+import { AuthenticationService } from 'src/app/services/authentication.service'
+import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
+import { JsonstoreService } from './jsonstore.service';
+import { MFPUser } from '../models/mfpuser.model';
 
 @Injectable({
   providedIn: 'root'
@@ -10,7 +13,7 @@ export class UtilsService {
   private loadingElement: any;
 
   constructor( private alertCtrl: AlertController, private loadingController: LoadingController,
-               private fingerPrintAIO: FingerprintAIO) { }
+               private fingerPrintAIO: FingerprintAIO, private authenticationService: AuthenticationService, private jsonstoreService : JsonstoreService) { }
 
   async presentLoading() {
     this.loadingElement = await this.loadingController.create({
@@ -66,16 +69,25 @@ export class UtilsService {
         {
           text: 'Cancel',
           role: 'cancel',
-          cssClass: 'secondary',
-          handler: () => {
-          }
+          cssClass: 'secondary'
         }, {
           text: 'Okay',
           handler: () => {
             if (this.isFingerprintAvailable()) {
-              this.presentFingerPrint()
-              .then((result: any) => {
-                this.showAlert('Success', 'Successfully enrolled for Biometric Authentication');
+              this.presentFingerPrint().then((result: any) => {
+                this.authenticationService.enroll().then(
+                  () => {
+                    let user = new MFPUser();
+                    user.userName = "MFPUser";
+                    user.isEnrolled = true;
+                    user.secretToken = "1234";
+                    this.jsonstoreService.storeUserData(user).finally(() =>{
+                      this.showAlert('Success', 'Successfully enrolled for Biometric Authentication');
+                    });
+                  }, () => {
+                    this.showAlert('Failure', 'Failed to enroll for Biometric Authentication');
+                  }
+                )
               })
               .catch((error: any) => {
                 this.showAlert('Failure', 'Failed to enroll for Biometric Authentication');

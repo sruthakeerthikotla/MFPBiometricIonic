@@ -11,6 +11,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
 import { AuthenticationService } from 'src/app/services/authentication.service'
 import { UtilsService } from 'src/app/services/utils.service'
+import { JsonstoreService } from 'src/app/services/jsonstore.service'
 
 @NgModule({
   declarations: [AppComponent],
@@ -22,6 +23,7 @@ import { UtilsService } from 'src/app/services/utils.service'
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy },
     FingerprintAIO,
     AuthenticationService,
+    JsonstoreService,
     UtilsService
   ],
   bootstrap: [AppComponent]
