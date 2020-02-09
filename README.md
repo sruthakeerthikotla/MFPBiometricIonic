@@ -1,6 +1,6 @@
 IBM MobileFirst Platform Foundation
 ===
-## MFPBiometric
+## MFPBiometricIonic
 A sample Ionic 4.Xapplication demonstrating use of the Biometric Validation using Credentials Validation Security Check.
 
 ![phone screen](mobilefirst/screenshot.png)
