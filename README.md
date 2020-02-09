@@ -25,7 +25,7 @@ A sample Ionic 4.Xapplication demonstrating use of the Biometric Validation usin
 IBM MobileFirst Platform Foundation 8.0
 
 ### License
-Copyright 2O20 IBM Corp.
+Copyright 2020 IBM Corp.
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
