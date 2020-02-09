@@ -3,6 +3,8 @@ IBM MobileFirst Platform Foundation
 ## MFPBiometric
 A sample Ionic 4.Xapplication demonstrating use of the Biometric Validation using Credentials Validation Security Check.
 
+![phone screen](mobilefirst/screenshot.png)
+
 ### Usage
 
 1. Use either Maven, MobileFirst CLI or your IDE of choice to [build and deploy the available `ResourceAdapter` and `UserLogin` adapters](https://mobilefirstplatform.ibmcloud.com/tutorials/en/foundation/8.0/adapters/creating-adapters/).
