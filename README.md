@@ -1,7 +1,7 @@
 IBM MobileFirst Platform Foundation
 ===
 ## MFPBiometricIonic
-A sample Ionic 4.Xapplication demonstrating use of the Biometric Validation using Credentials Validation Security Check.
+A sample Ionic 4.x application demonstrating use of the Biometric Validation using Credentials Validation Security Check.
 
 ![phone screen](mobilefirst/screenshot.png)
 
@@ -17,7 +17,7 @@ A sample Ionic 4.Xapplication demonstrating use of the Biometric Validation usin
  - `mfpdev app push` - to map the `accessRestricted` scope to the `UserLogin` security check.
  - `ionic cordova run` - to run the application.
 
-3. Run the application in an Android Emulator, iOS Simulator, Browser or physical device. Login with username and password as `vittal`, You can Enroll for Biometric Authentication for Subsequent Logins.
+3. Run the application in an Android Emulator, iOS Simulator or Physical device. Login with username and password as `vittal`, You can Enroll for Biometric Authentication for Subsequent Logins.
 
 4. This sample supports both Touch and FaceID Authentication.
 
