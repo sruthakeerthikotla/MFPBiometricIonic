@@ -12,7 +12,7 @@ import { MFPUser } from 'src/app/models/mfpuser.model';
   templateUrl: './login.page.html',
   styleUrls: ['./login.page.scss'],
 })
-export class LoginPage implements OnInit {
+export class LoginPage {
   userName: string;
   password: string;
   isEnrolled: boolean = false;
