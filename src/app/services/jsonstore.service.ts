@@ -10,8 +10,6 @@ import { resolve } from 'url';
 export class JsonstoreService {
 
   private collectionName: string = "mfpBiometric";
-  private currentUserSubject: BehaviorSubject<MFPUser>;
-  public currentUser: Observable<MFPUser>;
 
   constructor(public router: Router) {
   }
@@ -34,14 +32,6 @@ export class JsonstoreService {
     return promise;
   }
 
-
-  public get currentUserValue(): MFPUser {
-    if(this.currentUserSubject != undefined){
-      return this.currentUserSubject.value;
-    }
-    return undefined
-  }
-
   public storeUserData(user: MFPUser) {
     return new Promise((resolve, reject) => {
       var doc = [{ _id: 1, json: user }];
@@ -61,30 +51,19 @@ export class JsonstoreService {
 
   public getUserData() {
     return new Promise((resolve, reject) => {
-      let userData: MFPUser;
       var options = {
         exact: false
       };
       var collection = WL.JSONStore.get(this.collectionName);
       collection.findById([1], options).then(function (results) {
-        if(results.length > 0) {
-          this.currentUserSubject = new BehaviorSubject<MFPUser>(results[0].json);
-           this.currentUser = this.currentUserSubject.asObservable();
+        if (results.length > 0) {
+          resolve(results[0].json);
         }
-        resolve(results);
+        resolve(undefined);
       }).fail(function (error) {
         WL.Logger.debug("Failed to retreive user data. Reason : " + JSON.stringify(error));
         reject(error);
       });
     });
-  }
-
-  async clearUserData() {
-    WL.JSONStore.destroy(this.collectionName).then(function () {
-      WL.Logger.debug("Successfully destroyed the collection");
-    }).fail(function (error) {
-      WL.Logger.debug("Failed to destroy the collection. Reason : " + JSON.stringify(error));
-    });
-    this.currentUserSubject.next(null);
   }
 }

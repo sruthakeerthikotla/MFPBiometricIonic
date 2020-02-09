@@ -15,13 +15,13 @@ import { MFPUser } from 'src/app/models/mfpuser.model';
 export class LoginPage implements OnInit {
   userName: string;
   password: string;
-  mfpUser: MFPUser;
-  onInit: boolean;
-  private userLoginChallengeHandler : WL.Client.SecurityCheckChallengeHandler; 
+  isEnrolled: boolean = false;
+  mfpUser: MFPUser = new MFPUser();
+  private userLoginChallengeHandler: WL.Client.SecurityCheckChallengeHandler;
   private isChallenged = false;
 
-  constructor(private utils: UtilsService, private authenticationService: AuthenticationService, private router: Router, private events: Events, private jsonstoreService : JsonstoreService) { 
-    events.subscribe('mfp:challenge', (msg , challengeHandler) => {
+  constructor(private utils: UtilsService, private authenticationService: AuthenticationService, private router: Router, private events: Events, private jsonstoreService: JsonstoreService) {
+    events.subscribe('mfp:challenge', (msg, challengeHandler) => {
       this.isChallenged = true;
       this.password = "";
       this.userLoginChallengeHandler = challengeHandler;
@@ -29,33 +29,23 @@ export class LoginPage implements OnInit {
     });
   }
 
-  ngOnInit() {
-    this.onInit = true;
-    this.checkForEnrollment();
-    }
-  
-    ionViewDidEnter(): void {
+  ionViewWillEnter(): void {
+      this.checkForEnrollment();
+  }
 
-        this.checkForEnrollment();
-      
-    }
-    
-    checkForEnrollment() {
-      // this.authenticationService.isEnrolled()
-      // .then(() => {
-      //   WL.Logger.debug("Device is enrolled for Biometric Authentication")
-      //   this.mfpUser = this.jsonstoreService.currentUserValue;
-      // })
-      // .catch((error) => {
-      //   WL.Logger.debug("Device is not enrolled for Biometric Authentication")
-      //   if(this.jsonstoreService.currentUserValue.isEnrolled) {
-      //     var user = this.jsonstoreService.currentUserValue;
-      //     user.isEnrolled = false;
-      //     user.secretToken = null;
-      //     this.jsonstoreService.storeUserData(user);
-      //   }
-      // });
-    }
+  checkForEnrollment() {
+    this.utils.presentLoading();
+    this.jsonstoreService.getUserData().then((user) => {
+      if (user != undefined && user['isEnrolled'] != undefined) {
+        this.mfpUser.userName = user['userName'];
+        this.mfpUser.secretToken = user['secretToken'];
+        this.mfpUser.isEnrolled = user['isEnrolled'];
+        this.isEnrolled = this.mfpUser.isEnrolled;
+      }
+    }).finally(() => {
+      this.utils.dismissLoading();
+    });
+  }
 
 
   login() {
@@ -63,18 +53,18 @@ export class LoginPage implements OnInit {
       this.utils.showAlert('Error!', 'Please enter username and password');
     } else if (!this.userName) {
       this.utils.showAlert('Error!', 'Please enter username');
-    }  else if (!this.password) {
+    } else if (!this.password) {
       this.utils.showAlert('Error!', 'Please enter password');
-    } else if(this.isChallenged) {
+    } else if (this.isChallenged) {
       console.log('-->  login(): Subsequent login attempt');
-       this.userLoginChallengeHandler.submitChallengeAnswer({
-         username: this.userName,
-         password: this.password
-       });
-       this.isChallenged = false;
-     } else {
+      this.userLoginChallengeHandler.submitChallengeAnswer({
+        username: this.userName,
+        password: this.password
+      });
+      this.isChallenged = false;
+    } else {
       console.log('-->  login(): First time login attempt');
-      const promise = this.authenticationService.login(this.userName, this.password);
+      const promise = this.authenticationService.login(this.userName, this.password, this.mfpUser.isEnrolled);
       promise.then((response: any) => {
         this.password = "";
         if (response.status !== undefined && response.status === 'success') {
@@ -96,15 +86,22 @@ export class LoginPage implements OnInit {
   loginWithFingerprint() {
     if (this.utils.isFingerprintAvailable) {
       this.utils.presentFingerPrint()
-      .then((result: any) => {
-        this.userName = this.mfpUser.userName
-        this.password = this.mfpUser.secretToken
-        this.login();
-      })
-      .catch((error: any) => {
-        console.error('fingerprint : ', 'error');
-      });
+        .then((result: any) => {
+          this.userName = this.mfpUser.userName
+          this.password = this.mfpUser.secretToken
+          this.login();
+        })
+        .catch((error: any) => {
+          console.error('fingerprint : ', 'error');
+        });
     }
+  }
+
+  clearStoredCredentials() {
+    this.jsonstoreService.storeUserData(new MFPUser()).finally(() => {
+      this.isEnrolled = false;
+      this.mfpUser = new MFPUser();
+    });
   }
 
 }

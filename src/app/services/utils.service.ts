@@ -10,35 +10,45 @@ import { MFPUser } from '../models/mfpuser.model';
 })
 export class UtilsService {
 
+  isLoading = false;
   private loadingElement: any;
 
-  constructor( private alertCtrl: AlertController, private loadingController: LoadingController,
-               private fingerPrintAIO: FingerprintAIO, private authenticationService: AuthenticationService, private jsonstoreService : JsonstoreService) { }
+  constructor(private alertCtrl: AlertController, private loadingController: LoadingController,
+    private fingerPrintAIO: FingerprintAIO, private authenticationService: AuthenticationService, private jsonstoreService: JsonstoreService) { }
+
 
   async presentLoading() {
-    this.loadingElement = await this.loadingController.create({
+    this.isLoading = true;
+    return await this.loadingController.create({
+      duration: 4000,
       message: 'Loading...',
       spinner: 'crescent'
+    }).then(a => {
+      a.present().then(() => {
+        if (!this.isLoading) {
+          a.dismiss();
+        }
+      });
     });
-    return await this.loadingElement.present();
   }
+
   async dismissLoading() {
-    console.log('loading dismissed');
-    return await this.loadingElement.dismiss();
+    this.isLoading = false;
+    return await this.loadingController.dismiss();
   }
 
   showAlert(header: string, message: string) {
     let alert = this.alertCtrl
-    .create({
-      header: header,
-      message: message,
-      buttons: [
-        {
-          text: 'Ok'
-        }
-      ]
-    })
-    .then(arltElem => arltElem.present());
+      .create({
+        header: header,
+        message: message,
+        buttons: [
+          {
+            text: 'Ok'
+          }
+        ]
+      })
+      .then(arltElem => arltElem.present());
   }
 
   presentFingerPrint() {
@@ -51,13 +61,13 @@ export class UtilsService {
     let result = false;
     const promise = await this.fingerPrintAIO.isAvailable();
     promise.then((response) => {
-        result = true;
-        console.log('fingerprint available : ', response);
-       });
+      result = true;
+      console.log('fingerprint available : ', response);
+    });
     promise.catch((error) => {
-         result  = false;
-         console.log('fingerprint error : ', error);
-       });
+      result = false;
+      console.log('fingerprint error : ', error);
+    });
     return result;
   }
 
@@ -79,13 +89,13 @@ export class UtilsService {
                 user.userName = username;
                 user.isEnrolled = true;
                 user.secretToken = password;
-                this.jsonstoreService.storeUserData(user).finally(() =>{
+                this.jsonstoreService.storeUserData(user).finally(() => {
                   this.showAlert('Success', 'Successfully enrolled for Biometric Authentication');
                 });
               })
-              .catch((error: any) => {
-                this.showAlert('Failure', 'Failed to enroll for Biometric Authentication');
-              });
+                .catch((error: any) => {
+                  this.showAlert('Failure', 'Failed to enroll for Biometric Authentication');
+                });
             }
           }
         }
@@ -93,6 +103,4 @@ export class UtilsService {
     });
     await alert.present();
   }
-
-
 }
